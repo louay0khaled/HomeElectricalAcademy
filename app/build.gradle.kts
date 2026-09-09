@@ -17,6 +17,14 @@ android {
 
     buildFeatures { compose = true }
     packaging { resources.excludes += "/META-INF/{AL2.0,LGPL2.1}" }
+
+    buildTypes {
+        release {
+            // CI fallback: use Android's standard debug keystore when no release key is available.
+            // This produces an installable artifact; replace with a private release key for production.
+            signingConfig = signingConfigs.getByName("debug")
+        }
+    }
 }
 
 dependencies {
