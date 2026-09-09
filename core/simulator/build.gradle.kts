@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.louaykhaled.homeelectricalacademy.core.simulator"
-    compileSdk = 37
+    compileSdk = 36
     defaultConfig { 
         minSdk = 26
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -21,7 +21,6 @@ dependencies {
     implementation(project(":core:model"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.0")
     
-    // Testing
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.9.0")
 }
