@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.louaykhaled.homeelectricalacademy"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.louaykhaled.homeelectricalacademy"
@@ -20,8 +20,6 @@ android {
 
     buildTypes {
         release {
-            // CI fallback: use Android's standard debug keystore when no release key is available.
-            // This produces an installable artifact; replace with a private release key for production.
             signingConfig = signingConfigs.getByName("debug")
         }
     }
