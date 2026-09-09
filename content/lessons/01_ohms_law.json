@@ -1,0 +1,39 @@
+{
+  "id": "foundation.ohms-law.01",
+  "language": "ar",
+  "title": "قانون أوم: من الفكرة إلى القياس",
+  "level": 0,
+  "type": "interactive_science",
+  "objective": "فهم العلاقة بين الجهد والتيار والمقاومة، ثم التحقق منها بالمحاكاة.",
+  "explanation": [
+    "الجهد هو فرق في الجهد الكهربائي يدفع الشحنة عبر مسار كهربائي.",
+    "المقاومة تمثل معارضة مرور التيار في النموذج المقاومي المثالي.",
+    "عند ثبات المقاومة، زيادة الجهد تزيد التيار تناسبيًا.",
+    "عند ثبات الجهد، زيادة المقاومة تخفض التيار تناسبيًا."
+  ],
+  "equations": [
+    "I = V / R",
+    "P = V × I"
+  ],
+  "simulation": {
+    "sourceVolts": 12.0,
+    "loadOhms": 6.0,
+    "switch": "closed",
+    "predictionRequired": true,
+    "measurements": ["voltage", "current", "power"]
+  },
+  "checks": [
+    {
+      "question": "عند V=12 V وR=6 Ω، ما التيار المثالي؟",
+      "answer": 2.0,
+      "unit": "A",
+      "tolerance": 0.01
+    },
+    {
+      "question": "إذا أصبحت المقاومة 12 Ω مع بقاء الجهد 12 V، ماذا يحدث للتيار؟",
+      "answer": 1.0,
+      "unit": "A",
+      "tolerance": 0.01
+    }
+  ]
+}
