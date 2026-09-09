@@ -4,6 +4,6 @@ plugins {
 
 android {
     namespace = "com.louaykhaled.homeelectricalacademy.core.model"
-    compileSdk = 37
+    compileSdk = 36
     defaultConfig { minSdk = 26 }
 }
