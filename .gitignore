@@ -1,0 +1,49 @@
+```
+# Dependencies
+.gradle/
+node_modules/
+venv/
+.venv/
+__pycache__/
+
+# Build artifacts
+build/
+dist/
+target/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.tmp
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Python specific
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.so
+*.egg-info/
+
+# Java/Kotlin specific
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar
+*.gz
+
+# OS generated files
+.DS_Store
+Thumbs.db
+```
