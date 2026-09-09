@@ -17,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -24,6 +25,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.louaykhaled.homeelectricalacademy.core.model.Resistor
+import com.louaykhaled.homeelectricalacademy.core.model.VoltageSource
+import com.louaykhaled.homeelectricalacademy.core.simulator.IdealCircuitSolver
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,58 +36,56 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@androidx.compose.runtime.Composable
+@Composable
 private fun HomeElectricalAcademyApp() {
-    MaterialTheme {
-        Surface(modifier = Modifier.fillMaxSize()) {
-            LabHome()
-        }
-    }
+    MaterialTheme { Surface(Modifier.fillMaxSize()) { CircuitLabScreen() } }
 }
 
-@androidx.compose.runtime.Composable
-private fun LabHome() {
+@Composable
+private fun CircuitLabScreen() {
     var voltage by remember { mutableFloatStateOf(12f) }
     var resistance by remember { mutableFloatStateOf(6f) }
-    var simulated by remember { mutableStateOf(false) }
-
-    val current = voltage / resistance
-    val power = voltage * current
+    var closed by remember { mutableStateOf(false) }
+    val solver = remember { IdealCircuitSolver() }
+    val state = solver.solve(
+        VoltageSource("source", voltage.toDouble()),
+        Resistor("load", resistance.toDouble()),
+        closed
+    )
 
     Column(
         modifier = Modifier.fillMaxSize().padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text("Home Electrical Academy", style = MaterialTheme.typography.headlineMedium)
-        Text("Milestone 1 • Scientific Circuit Lab", style = MaterialTheme.typography.titleMedium)
-        Text("غيّر القيم، توقّع النتيجة، ثم شغّل المحاكاة. هذه أول نواة للمختبر التفاعلي.")
+        Text("المختبر العلمي • الدائرة الأولى", style = MaterialTheme.typography.titleMedium)
+        Text("اشرح القانون، توقّع النتيجة، غيّر الحالة، ثم راقب ما يحسبه نموذج الدائرة.")
 
-        Card(modifier = Modifier.fillMaxWidth()) {
-            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Card(Modifier.fillMaxWidth()) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text("مصدر الجهد: ${"%.1f".format(voltage)} V")
-                Slider(value = voltage, onValueChange = { voltage = it; simulated = false }, valueRange = 1f..24f)
+                Slider(voltage, { voltage = it }, 1f..24f)
                 Text("المقاومة: ${"%.1f".format(resistance)} Ω")
-                Slider(value = resistance, onValueChange = { resistance = it; simulated = false }, valueRange = 1f..24f)
+                Slider(resistance, { resistance = it }, 1f..24f)
                 Spacer(Modifier.height(4.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Button(onClick = { simulated = true }) { Text("تشغيل المحاكاة") }
-                    Button(onClick = { voltage = 12f; resistance = 6f; simulated = false }) { Text("إعادة ضبط") }
+                    Button(onClick = { closed = !closed }) {
+                        Text(if (closed) "فتح المفتاح" else "إغلاق المفتاح")
+                    }
+                    Button(onClick = { voltage = 12f; resistance = 6f; closed = false }) {
+                        Text("إعادة ضبط")
+                    }
                 }
             }
         }
 
-        Card(modifier = Modifier.fillMaxWidth()) {
-            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("النتيجة العلمية", style = MaterialTheme.typography.titleLarge)
-                Text("قانون أوم: I = V / R")
-                Text("التيار المتوقع: ${"%.2f".format(current)} A")
-                Text("القدرة: ${"%.2f".format(power)} W")
-                if (simulated) {
-                    Text("المحاكاة: الدائرة المغلقة تعمل وفق النموذج المثالي.")
-                    Text("الخطوة التالية: إضافة مصدر وحمل ومفتاح وقياس متعدد النقاط.")
-                } else {
-                    Text("الحالة: توقّع النتيجة أولًا، ثم شغّل المحاكاة.")
-                }
+        Card(Modifier.fillMaxWidth()) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text("القياسات", style = MaterialTheme.typography.titleLarge)
+                Text("المسار: ${if (state.energized) "مغلق" else "مفتوح"}")
+                Text("التيار: ${"%.2f".format(state.currentAmps)} A")
+                Text("القدرة: ${"%.2f".format(state.powerWatts)} W")
+                Text("النموذج: I = V / R ، P = V × I")
             }
         }
     }
